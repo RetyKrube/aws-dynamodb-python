@@ -40,6 +40,20 @@ def download_data():
     except ClientError as e:
         print("Client error %s" % e)
         
+def write_dynamo_db(json_data):
+    try:
+        data = db.batch_write_item(
+            RequestItems = json_data
+        )
+        print('UnprocessedItems: ')
+        print(data['UnprocessedItems'])
+        return data
+    # An error occured
+    except ParamValidationError as e:
+        print("Parameter validation error: %s" % e)
+    except ClientError as e:
+        print("Client error %s" % e)
+        
         
 # Main program
 def main():
@@ -49,7 +63,8 @@ def main():
     else:
         for x in table_names:
             print('Table name: '+ x )
-        download_data()
+        y = download_data()
+        write_dynamo_db(y)
             
 if __name__ == '__main__':
     main()
