@@ -58,7 +58,7 @@ def query_dynamo_db():
     try:
         data = db.query(
             TableName='test-table',
-            IndexName='ProductCategory-Price_index',
+            IndexName='ProductCategory-Price-index',
             KeyConditionExpression='ProductCategory = :c AND Price <= :p',
             ExpressionAttributeValues={
                 ':c': {'S': 'Bike'},
