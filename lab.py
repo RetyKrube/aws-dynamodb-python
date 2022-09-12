@@ -54,6 +54,26 @@ def write_dynamo_db(json_data):
     except ClientError as e:
         print("Client error %s" % e)
         
+def query_dynamo_db():
+    try:
+        data = db.query(
+            TableName='test-table',
+            IndexName='ProductCategory-Price_index',
+            KeyConditionExpression='ProductCategory = :c AND Price <= :p',
+            ExpressionAttributeValues={
+                ':c': {'S': 'Bike'},
+                ':p': {'N': '300'}
+                }
+        )
+        print('Matching Items')
+        for x in data['Items']:
+            print(x)
+    # An error occurred
+    except ParamValidationError as e:
+        print('Parameter validation error: %s' % e)
+    except ClientError as e:
+        print('Client error %s' % e)
+        
         
 # Main program
 def main():
@@ -65,6 +85,7 @@ def main():
             print('Table name: '+ x )
         y = download_data()
         write_dynamo_db(y)
+        query_dyanamo_db()
             
 if __name__ == '__main__':
     main()
